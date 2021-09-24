@@ -26,22 +26,22 @@ func Compile(r io.Reader) (string, error) {
 		return "", err
 	}
 	w.Close()
-	return convert(buf.Bytes())
+	return convertToIf(buf.Bytes())
 }
 
-func convert(data []byte) (string, error) {
+func convertToIf(data []byte) (string, error) {
 	var sb strings.Builder
 	for _, b := range data {
-		ifs := convertToIf(b)
+		ifs := convertToIfByte(b)
 		sb.WriteString(ifs)
 	}
 
 	return sb.String(), nil
 }
 
-func convertToIf(b byte) string {
+func convertToIfByte(b byte) string {
 	var sb strings.Builder
-	for i := 0; i < 8; i++ {
+	for i := 7; 0 <= i; i-- {
 		if 0x01&(b>>i) == 1 {
 			sb.WriteString("if")
 		} else {
